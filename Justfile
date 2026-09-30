@@ -1,6 +1,7 @@
 # jankurai-tools-fleet root command surface.
 # One-command setup and validation lanes for agents and CI.
-# Every lane below is deterministic, hermetic, and runnable from the repo root.
+# Lanes run from the repo root. Required checks the public kernel tag online
+# before running its locked offline Cargo proof.
 
 # Default: list available lanes.
 default:

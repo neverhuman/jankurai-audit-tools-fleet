@@ -340,7 +340,7 @@ checksum = "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682"
 [[package]]
 name = "jankurai-audit-kernel"
 version = "0.1.0"
-source = "git+https://github.com/neverhuman/jankurai-tools-kernel.git?tag=jankurai-tools-kernel-v1.7.0-split.1#92511486b87518bad58b04caff3e772c9c72906d"
+source = "git+https://github.com/neverhuman/jankurai-audit-tools-kernel.git?tag=jankurai-tools-kernel-v1.7.0-split.1#92511486b87518bad58b04caff3e772c9c72906d"
 dependencies = [
  "aho-corasick",
  "anyhow",

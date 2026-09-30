@@ -2,7 +2,8 @@
 # Required lane: the gate that must pass on every push.
 # Verifies the workspace manifest resolves against the locked dependency
 # graph, then formats, lints and tests it. Every cargo invocation is
-# --locked --offline so the lane proves the committed lockfile is complete
+# --locked --offline after the explicit public mirror reachability check,
+# so the lane proves the committed lockfile is complete
 # and cannot silently resolve a different dependency graph.
 set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
@@ -13,6 +14,10 @@ bash ops/ci/auditor-test.sh
 
 log "required lane: ci-local lane contract"
 bash scripts/ci-local-lanes-test.sh
+
+log "required lane: uncached public kernel mirror identity"
+bash scripts/check-kernel-mirror-test.sh
+bash scripts/check-kernel-mirror.sh
 
 log "required lane: cargo metadata"
 cargo metadata --locked --offline --no-deps --format-version 1 >/dev/null
