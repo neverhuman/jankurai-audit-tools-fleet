@@ -6,8 +6,8 @@
 //! scoring logic); each repo is scored with `run_audit_with_options` and the
 //! relevant report fields are projected into a stable matrix row.
 
-use jankurai_audit_kernel::model::{Finding, Report, AUDITOR_VERSION};
 use anyhow::{bail, Context, Result};
+use jankurai_audit_kernel::model::{Finding, Report, AUDITOR_VERSION};
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -610,17 +610,33 @@ fn git_branch(repo: &Path) -> Option<String> {
     }
 }
 
-/// Classify the canonical host from origin's URL (forge = local Jeryu, else github/other).
+/// Environment slot naming this site's authority forge, as comma-separated
+/// substrings matched against `origin`'s URL (e.g. `forge.example,10.0.0.7:8787`).
+/// Forge hostnames are site configuration, so none are compiled in.
+const FORGE_URL_MATCH_ENV: &str = "JANKURAI_FORGE_URL_MATCH";
+
+/// Classify the canonical host from origin's URL (forge = the configured
+/// authority forge, else github/other).
 fn git_host(repo: &Path) -> Option<String> {
     let url = git_str(repo, &["remote", "get-url", "origin"])?;
-    let host = if url.contains("127.0.0.1:8787") {
+    Some(classify_host(&url, std::env::var(FORGE_URL_MATCH_ENV).ok().as_deref()).to_string())
+}
+
+/// Classify one origin URL. `forge_match` is the raw environment value, so an
+/// unset or blank setting simply leaves non-GitHub remotes as `other`.
+fn classify_host(url: &str, forge_match: Option<&str>) -> &'static str {
+    let matches_forge = forge_match
+        .unwrap_or_default()
+        .split(',')
+        .map(str::trim)
+        .any(|pattern| !pattern.is_empty() && url.contains(pattern));
+    if matches_forge {
         "forge"
     } else if url.contains("github") {
         "github"
     } else {
         "other"
-    };
-    Some(host.to_string())
+    }
 }
 
 /// HEAD commit time as raw epoch seconds (deterministic; the dashboard computes age).
@@ -744,6 +760,39 @@ mod tests {
             line: None,
             matched_term: None,
             reason: None,
+        }
+    }
+
+    #[test]
+    fn host_classification_reads_the_forge_from_configuration() {
+        // Invented site values; no real forge is compiled in.
+        let forge = Some("forge.example,10.0.0.7:8787");
+        assert_eq!(
+            classify_host("https://forge.example/git/root/jankurai.git", forge),
+            "forge"
+        );
+        assert_eq!(
+            classify_host("http://10.0.0.7:8787/git/root/x.git", forge),
+            "forge"
+        );
+        assert_eq!(
+            classify_host("https://github.com/neverhuman/jankurai.git", forge),
+            "github"
+        );
+        assert_eq!(classify_host("https://example.net/x.git", forge), "other");
+    }
+
+    #[test]
+    fn an_unconfigured_forge_never_matches_by_accident() {
+        for setting in [None, Some(""), Some(" , ")] {
+            assert_eq!(
+                classify_host("https://forge.example/git/root/jankurai.git", setting),
+                "other"
+            );
+            assert_eq!(
+                classify_host("https://github.com/neverhuman/jankurai.git", setting),
+                "github"
+            );
         }
     }
 

@@ -24,6 +24,10 @@ version string lives in [`VERSION`](VERSION).
 
 ### Changed
 
+- The fleet matrix now classifies a repo's `host` as `forge` from the
+  comma-separated URL substrings in `JANKURAI_FORGE_URL_MATCH` instead of a
+  compiled-in loopback forge address. Unset leaves non-GitHub remotes as
+  `other`.
 - Re-scoped `agent/boundaries.toml`, `agent/owner-map.json`,
   `agent/test-map.json`, `agent/generated-zones.toml`, and
   `agent/proof-lanes.toml` to the paths that exist in this single-purpose repo.
