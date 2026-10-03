@@ -6,7 +6,7 @@ Testing is routed proof. Agents should not guess which tests matter.
 | --- | --- |
 | `required` | lightweight gate: workspace manifest resolves against the locked graph |
 | `fast` | deterministic local proof for most edits (`cargo check` + workspace tests) |
-| `security` | secrets, dependencies, SBOM/SCA, workflow lint |
+| `security` | secrets, dependencies, SBOM/SCA |
 | `audit` | jankurai repo score and hard-rule findings |
 | `coverage-audit` | parse deterministic coverage and proof-gap artifacts |
 | `copy-code` | exact and high-confidence duplicate source scan |
