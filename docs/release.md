@@ -15,9 +15,11 @@ any release tag MUST match `VERSION`. Tags follow the family pattern
 
 ## Changelog
 
-Every release records its user-visible changes in
-[`CHANGELOG.md`](../CHANGELOG.md) under a heading that matches the new `VERSION`.
-The `Unreleased` section is promoted to a dated version heading at tag time.
+Release notes are generated from the commit subjects and `Todo:` trailers since
+the previous release. At tag time, the generated notes are written to
+[`CHANGELOG.md`](../CHANGELOG.md) under a heading that matches the new `VERSION`;
+the `Unreleased` section is kept for the release tooling and promoted to the
+dated version heading.
 
 ## Release automation
 
@@ -25,8 +27,9 @@ Releases are cut by CI, not by hand. GitHub is a publishing mirror only: CI
 runs on the forge and our hosts, and release artifacts are built and signed on
 our servers. Key-based release signing is introduced in a separate change.
 
-1. Bump [`VERSION`](../VERSION) and promote the `Unreleased` section of
-   [`CHANGELOG.md`](../CHANGELOG.md).
+1. Bump [`VERSION`](../VERSION), generate release notes from commits since the
+   previous release, and promote the `Unreleased` section of
+   [`CHANGELOG.md`](../CHANGELOG.md) to the new dated version heading.
 2. Run the full local gate: `just check` (format, lint, fast lane, security,
    self-audit).
 3. Push the version commit to the forge. Forge-hosted CI on our own servers
@@ -56,8 +59,9 @@ If a release regresses:
 1. Identify the last known-good tag
    (`jankurai-tools-fleet-v<version>-split.<N>`).
 2. Re-point consumers at that immutable tag; tags are never moved or deleted.
-3. Open a revert commit that restores the previous `VERSION` and `CHANGELOG.md`
-   state, and add a `### Fixed` entry describing the rollback.
+3. Open a revert commit that restores the previous `VERSION` and
+   `CHANGELOG.md` state. Any rollback release notes are generated from the
+   rollback commits at release time.
 4. Re-run `just check` to confirm the rolled-back tree is green before
    re-publishing.
 
