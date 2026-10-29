@@ -9,15 +9,17 @@ This source and revision are shared with the auditor 1.7.6 composition.
 The public publishing mirror remains
 `https://github.com/neverhuman/jankurai-audit-tools-kernel.git`, as declared in
 the hub's `repos.manifest.toml`. The mirror is an availability check;
-Cargo's manifest and lock use the forge identity. Member authority metadata
-names the hosted forge and its existing publishing mirror.
+Cargo's manifest and lock use the forge identity. Fleet's own publishing
+metadata and repository destinations keep their existing main-branch values;
+the exception here concerns only the kernel dependency.
 
 `bash scripts/check-kernel-mirror.sh` first checks the direct dependency and
 Cargo lock for that exact forge URL, tag and commit. It then queries the public
 mirror with system, global, repository-local and injected Git configuration
 disabled and no credential helper. A missing tag, moved tag or failed query
-fails the required lane. The offline fixtures exercise a matching identity,
-a changed commit and a network failure. The script never resolves or rewrites
+fails the required lane. Lightweight tags compare their direct commit; annotated
+tags compare the peeled commit. The offline fixtures cover both forms, wrong
+commits, missing or malformed refs and a failed query. The script never resolves or rewrites
 Cargo.lock. This public read is not an ownership attestation or a substitute
 for reviewing the forge revision.
 

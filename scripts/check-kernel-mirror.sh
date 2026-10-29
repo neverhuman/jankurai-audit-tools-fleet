@@ -13,7 +13,19 @@ grep -Fxq "source = \"git+$source_url?tag=$tag#$sha\"" Cargo.lock
 actual=$(env -u GIT_CONFIG_PARAMETERS -u GIT_CONFIG_COUNT -u GIT_DIR \
   -u GIT_WORK_TREE -u GIT_COMMON_DIR GIT_CONFIG_NOSYSTEM=1 \
   GIT_CONFIG_GLOBAL=/dev/null GIT_TERMINAL_PROMPT=0 \
-  git -C / -c credential.helper= ls-remote --exit-code --refs "$url" "refs/tags/$tag")
-expected=$(printf '%s\trefs/tags/%s' "$sha" "$tag")
-[[ "$actual" == "$expected" ]] || { echo 'kernel mirror does not serve the accepted locked commit' >&2; exit 1; }
+  git -C / -c credential.helper= ls-remote --exit-code "$url" "refs/tags/$tag" "refs/tags/$tag^{}")
+direct='' peeled=''
+while IFS=$'\t' read -r object ref extra; do
+  [[ "$object" =~ ^[0-9a-f]{40}$ && -z "$extra" ]] || { echo 'malformed mirror tag response' >&2; exit 1; }
+  case "$ref" in
+    "refs/tags/$tag")
+      [[ -z "$direct" ]] || { echo 'duplicate mirror tag response' >&2; exit 1; }
+      direct="$object" ;;
+    "refs/tags/$tag^{}")
+      [[ -z "$peeled" ]] || { echo 'duplicate peeled mirror tag response' >&2; exit 1; }
+      peeled="$object" ;;
+    *) echo 'unexpected mirror tag response' >&2; exit 1 ;;
+  esac
+done <<<"$actual"
+[[ -n "$direct" && "${peeled:-$direct}" == "$sha" ]] || { echo 'kernel mirror tag does not peel to the accepted locked commit' >&2; exit 1; }
 printf 'kernel mirror: public tag and accepted lock identity agree at %s\n' "$sha"

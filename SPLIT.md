@@ -11,17 +11,17 @@ Fleet dashboard, diff-audit, score history, trend, and repair-task bank source s
 
 ## Repositories
 
-- Authoritative Jeryu repo: `root/jankurai-tools-fleet`
-- Public GitHub mirror: `neverhuman/jankurai-audit-tools-fleet`
+- Historical Jeryu repo: `root/jankurai-tools-fleet`
+- Primary GitHub repository: `neverhuman/jankurai-tools-fleet`
 - Release tag pattern: `jankurai-tools-fleet-v1.7.0-split.0`
 - Source extraction commit: `cea83b0cbe204be276a2f0299cd760f6812ea2b0`
 
 ## Split Rules
 
-- Jeryu is authoritative; GitHub is the public publishing mirror.
-- Release builds depend on immutable tags, not branches. The kernel uses the
-  authoritative forge URL `https://git.jeryu.ai/git/root/jankurai-tools-kernel`;
-  the historical GitHub kernel repository is disabled.
+- GitHub is authoritative; Jeryu refs are retained as historical inputs.
+- Release builds depend on immutable GitHub tags, not branches, except for the
+  kernel dependency: its source is the forge URL
+  `https://git.jeryu.ai/git/root/jankurai-tools-kernel` at the tag pinned in Cargo.toml.
 - Local development uses the hub `scripts/fuse.sh` output under `.fusion/`.
 - Committed manifests must not depend on sibling checkout paths.
 - Generated outputs are regenerated from their source contracts or build commands.
