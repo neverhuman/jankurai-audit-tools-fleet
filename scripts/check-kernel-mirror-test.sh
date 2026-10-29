@@ -12,8 +12,8 @@ exit "${MIRROR_TEST_STATUS:-0}"
 STUB
 chmod +x "$fixture_bin/git"
 stub_path="$fixture_bin:$PATH"
-PATH="$stub_path" MIRROR_TEST_OUTPUT=$'92511486b87518bad58b04caff3e772c9c72906d\trefs/tags/jankurai-tools-kernel-v1.7.0-split.1' bash scripts/check-kernel-mirror.sh > target/kernel-mirror-test/exact-sha.log 2>&1
-if PATH="$stub_path" MIRROR_TEST_OUTPUT=$'0000000000000000000000000000000000000000\trefs/tags/jankurai-tools-kernel-v1.7.0-split.1' bash scripts/check-kernel-mirror.sh > target/kernel-mirror-test/wrong-sha.log 2>&1; then
+PATH="$stub_path" MIRROR_TEST_OUTPUT=$'65e8344ff3718ede0e05c55ee27003d9673c17f0\trefs/tags/ci-65e8344ff3718ede0e05c55ee27003d9673c17f0' bash scripts/check-kernel-mirror.sh > target/kernel-mirror-test/exact-sha.log 2>&1
+if PATH="$stub_path" MIRROR_TEST_OUTPUT=$'0000000000000000000000000000000000000000\trefs/tags/ci-65e8344ff3718ede0e05c55ee27003d9673c17f0' bash scripts/check-kernel-mirror.sh > target/kernel-mirror-test/wrong-sha.log 2>&1; then
   echo 'mirror guard accepted a moved tag' >&2; exit 1
 fi
 if PATH="$stub_path" MIRROR_TEST_STATUS=7 bash scripts/check-kernel-mirror.sh > target/kernel-mirror-test/network-failure.log 2>&1; then

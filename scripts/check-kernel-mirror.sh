@@ -3,11 +3,12 @@
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 url=https://github.com/neverhuman/jankurai-audit-tools-kernel.git
-tag=jankurai-tools-kernel-v1.7.0-split.1
-# This is the kernel commit already locked by accepted main before the URL move.
-sha=92511486b87518bad58b04caff3e772c9c72906d
-grep -Fq "git = \"$url\", tag = \"$tag\"" crates/jankurai-fleet/Cargo.toml
-grep -Fxq "source = \"git+$url?tag=$tag#$sha\"" Cargo.lock
+source_url=https://git.jeryu.ai/git/root/jankurai-tools-kernel
+tag=ci-65e8344ff3718ede0e05c55ee27003d9673c17f0
+# The immutable kernel revision shared by the 1.7.6 release composition.
+sha=65e8344ff3718ede0e05c55ee27003d9673c17f0
+grep -Fq "git = \"$source_url\", tag = \"$tag\"" crates/jankurai-fleet/Cargo.toml
+grep -Fxq "source = \"git+$source_url?tag=$tag#$sha\"" Cargo.lock
 # / is outside a checkout: no repo-local config. Strip injected Git config too.
 actual=$(env -u GIT_CONFIG_PARAMETERS -u GIT_CONFIG_COUNT -u GIT_DIR \
   -u GIT_WORK_TREE -u GIT_COMMON_DIR GIT_CONFIG_NOSYSTEM=1 \

@@ -19,7 +19,9 @@ Fleet dashboard, diff-audit, score history, trend, and repair-task bank source s
 ## Split Rules
 
 - Jeryu is authoritative; GitHub is the public publishing mirror.
-- Release builds depend on immutable GitHub tags, not branches.
+- Release builds depend on immutable tags, not branches. The kernel uses the
+  authoritative forge URL `https://git.jeryu.ai/git/root/jankurai-tools-kernel`;
+  the historical GitHub kernel repository is disabled.
 - Local development uses the hub `scripts/fuse.sh` output under `.fusion/`.
 - Committed manifests must not depend on sibling checkout paths.
 - Generated outputs are regenerated from their source contracts or build commands.
