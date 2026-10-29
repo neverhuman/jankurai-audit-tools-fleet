@@ -8,5 +8,6 @@ public_owner = "neverhuman"
 local_owner = "root"
 release_tag_pattern = "jankurai-tools-fleet-v1.7.0-split.0"
 
-authority_forge = "github"
-primary_repo = "neverhuman/jankurai-tools-fleet"
+authority_forge = "jeryu"
+primary_repo = "root/jankurai-tools-fleet"
+mirror_repo = "neverhuman/jankurai-audit-tools-fleet"

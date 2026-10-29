@@ -25,11 +25,12 @@ Inspect that existing authority independently with:
 git -C ../jankurai show 928c7fc91fc266a533837b55729858d271b48a60:repos.manifest.toml
 ```
 
-The member's historical `agent/split-member.toml` and `SPLIT.md` predate that
-hub authority migration; inferring the kernel mirror from those old member
-names contradicts the explicit accepted hub entry. No new mirror mapping is
-introduced by this PR. An anonymous read of the declared mirror returned the
-existing forge tag and locked commit.
+The member's `agent/split-member.toml`, `SPLIT.md`, `AGENTS.md` and `.jeryu/repo.toml`
+now also name the existing Jeryu authority and the fleet publishing mirror
+`neverhuman/jankurai-audit-tools-fleet`, matching that hub manifest. An anonymous
+read of the declared kernel mirror returned the existing forge tag and locked
+commit. This aligns member metadata with existing authority; it does not add a
+reviewer URL map or change reviewer trust policy.
 
 `bash scripts/check-kernel-mirror.sh` verifies the manifest and lock still name
 that exact identity, then queries the new public tag with system, global,
@@ -41,8 +42,8 @@ identity; negative fixtures reject a moved tag and a failed remote query. It doe
 
 The authoritative forge tag was independently read with `git ls-remote origin
 refs/tags/jankurai-tools-kernel-v1.7.0-split.1` in the kernel repository and matched
-the same commit. The existing fleet publishing metadata is separate from this
-dependency URL repair; changing other member mirror settings is outside this PR.
+the same commit. The fleet publishing metadata is aligned to the same accepted hub authority.
+Other members are outside this PR.
 
 This reachability check is not an ownership attestation. Mirror authorization comes from the
 pre-existing accepted hub manifest above, not from a network success or this
