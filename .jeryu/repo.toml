@@ -3,10 +3,10 @@ default_branch = "main"
 
 [shadow_main]
 enabled = true
-remote_url = "git@github.com:neverhuman/jankurai-audit-tools-fleet.git"
+remote_url = "git@github.com:neverhuman/jankurai-tools-fleet.git"
 refs = ["refs/heads/main"]
 
 [tag_mirror]
 enabled = true
-remote_url = "git@github.com:neverhuman/jankurai-audit-tools-fleet.git"
+remote_url = "git@github.com:neverhuman/jankurai-tools-fleet.git"
 tag_pattern = "jankurai-tools-fleet-v*"
