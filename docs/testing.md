@@ -72,7 +72,9 @@ Paid work or unbounded work needs an explicit ceiling before it starts.
 
 For this workspace:
 
-- `just required` runs the lightweight manifest gate with no network and no spend.
+- `just required` queries the public kernel tag anonymously over the network,
+  checks its exact locked identity, and then runs offline metadata, format, lint
+  and tests. A network failure or changed tag fails closed. It uses no paid API.
 - `just fast` writes a deterministic check + test snapshot with a bounded runtime
   budget (`timeout_seconds` in `agent/proof-lanes.toml`).
 - `just security` invokes secret and dependency scanning; its evidence envelope is

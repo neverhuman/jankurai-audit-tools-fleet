@@ -22,3 +22,8 @@ The authoritative forge tag was independently read with `git ls-remote origin
 refs/tags/jankurai-tools-kernel-v1.7.0-split.1` in the kernel repository and matched
 the same commit. The existing fleet publishing metadata is separate from this
 dependency URL repair; changing other member mirror settings is outside this PR.
+
+This reachability check is not an ownership attestation. Mirror ownership and
+the accepted base lock identity require independent forge/maintainer evidence.
+The required gate deliberately depends on public tag availability; this trades
+offline gate availability for continuous verification of the repaired route.

@@ -4,14 +4,14 @@
 [[lane]]
 name = "required"
 command = "bash scripts/ci-local.sh required"
-purpose = "lightweight gate: resolve the workspace manifest against the locked graph"
+purpose = "verify public kernel tag reachability, then locked offline metadata, format, lint and tests"
 command_id = "lane.required"
 kind = "validation"
 cost = 3
 rules_covered = ["HLT-003-OWNERLESS-PATH", "HLT-004-UNMAPPED-PROOF"]
 required_artifacts = []
 timeout_seconds = 600
-requires_network = false
+requires_network = true
 destructive = false
 
 [[lane]]
